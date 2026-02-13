@@ -5,8 +5,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import Aquablades from "./icons/aquablades";
+import GithubIcon from "./icons/github";
 import SeaSnares from "./icons/sea-snares";
 import { NavLink } from "./nav-link";
+import { Button } from "./ui/button";
 import { ModeToggle } from "./ui/theme-toggle";
 
 export default function Navbar() {
@@ -58,8 +60,18 @@ export default function Navbar() {
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <div className="hidden md:block">
+          <div className="hidden items-center gap-4 md:flex">
             <ModeToggle />
+            <Button variant="outline" size="icon" className="rounded-full">
+              <Link
+                href="https://github.com/akshualy/yareli.net"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <GithubIcon className="size-7" />
+                <span className="sr-only">GitHub</span>
+              </Link>
+            </Button>
           </div>
           <button
             type="button"
@@ -119,8 +131,18 @@ export default function Navbar() {
             <Aquablades className="size-8" />
             <span>Account</span>
           </NavLink>
-          <div className="border-border border-t pt-4">
+          <div className="border-border flex items-center gap-4 border-t pt-4">
             <ModeToggle />
+            <Button variant="outline" size="icon" className="rounded-full">
+              <Link
+                href="https://github.com/akshualy/yareli.net"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <GithubIcon className="size-7" />
+                <span className="sr-only">GitHub</span>
+              </Link>
+            </Button>
           </div>
         </div>
       </div>
