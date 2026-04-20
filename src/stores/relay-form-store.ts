@@ -57,7 +57,7 @@ export const useRelayFormStore = create<RelayFormState>()(
           const mappedRegion = region === "OC" ? "AS" : region;
 
           const response = await fetch(
-            `${env.API_BASE_URL}/v1/relays?region=${mappedRegion}&language=${language}&excludeCount=${excludeCount}&instances=${instances}`,
+            `${env.API_BASE_URL}/v1/relays?region=${mappedRegion}&language=${language}&excludeCount=${excludeCount}&instance_limit=${instances}`,
           );
 
           if (!response.ok) {
