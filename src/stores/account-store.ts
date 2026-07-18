@@ -16,8 +16,9 @@ const initialState = {
 function parseAccountId(accountInformationString: string): string | null {
   try {
     const data = JSON.parse(accountInformationString.replace(/\n/g, ""));
-    if (typeof data?.account_id === "string" && data.account_id) {
-      return data.account_id;
+    const id = data?.user_id ?? data?.account_id;
+    if (typeof id === "string" && id) {
+      return id;
     }
   } catch (error) {
     console.warn(
