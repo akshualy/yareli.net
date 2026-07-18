@@ -1,11 +1,4 @@
-import {
-  Check,
-  Clipboard,
-  ExternalLink,
-  LinkIcon,
-  Monitor,
-} from "lucide-react";
-import Image from "next/image";
+import { Check, Clipboard, ExternalLink, Monitor } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useMemo, useState } from "react";
 import AppleIcon from "@/components/icons/apple";
@@ -13,157 +6,117 @@ import PlaystationIcon from "@/components/icons/playstation";
 import SwitchIcon from "@/components/icons/switch";
 import XboxIcon from "@/components/icons/xbox";
 import { Button } from "@/components/ui/button";
-import type { AccountInformation } from "@/lib/types";
+import type { Profile } from "@/lib/types";
 
-/* TODO: Check what the platforms are actually called in the API */
 const platformIcons = {
   pc: <Monitor />,
-  xbox: <XboxIcon />,
-  apple: <AppleIcon />,
-  switch: <SwitchIcon />,
   playstation: <PlaystationIcon />,
+  xbox: <XboxIcon />,
+  switch: <SwitchIcon />,
+  apple: <AppleIcon />,
 };
 
-const cdnUrl = {
-  pc: "https://api.warframe.com/cdn",
-  xbox: "https://api-xb1.warframe.com/cdn",
-  apple: "https://api-mob.warframe.com/cdn",
-  switch: "https://api-swi.warframe.com/cdn",
-  playstation: "https://api-ps4.warframe.com/cdn",
-};
+type Platform = keyof typeof platformIcons;
 
-export default function AccountDisplay({
-  accountInformation,
-}: {
-  accountInformation: AccountInformation;
-}) {
+// Names end in a private-use character encoding the platform:
+// 0xE000 + (0 = PC, 1 = PlayStation, 2 = Xbox, 3 = Switch, 4 = iOS, 5 = Android)
+const GLYPH_PLATFORMS: Platform[] = [
+  "pc",
+  "playstation",
+  "xbox",
+  "switch",
+  "apple",
+  "apple",
+];
+
+function splitPlatformName(name: string): {
+  name: string;
+  platform: Platform | null;
+} {
+  const glyph = name.charCodeAt(name.length - 1) - 0xe000;
+  if (glyph >= 0) {
+    return {
+      name: name.slice(0, -1),
+      platform: GLYPH_PLATFORMS[glyph] ?? null,
+    };
+  }
+  return { name, platform: null };
+}
+
+export default function AccountDisplay({ profile }: { profile: Profile }) {
   const [copied, setCopied] = useState(false);
 
-  const platform = useMemo(() => {
-    const platform = accountInformation.account.game_platform.toLowerCase();
+  const { name: displayName, platform } = useMemo(
+    () => splitPlatformName(profile.displayName),
+    [profile.displayName],
+  );
 
-    if (platform === "pc") {
-      return "pc";
-    }
+  const platformNames = useMemo(
+    () => profile.platformNames.map(splitPlatformName),
+    [profile.platformNames],
+  );
 
-    if (platform.startsWith("xb")) {
-      return "xbox";
-    }
-
-    if (platform.startsWith("playstation") || platform.startsWith("ps")) {
-      return "playstation";
-    }
-
-    if (platform.startsWith("sw")) {
-      return "switch";
-    }
-
-    if (
-      platform.startsWith("ap") ||
-      platform.startsWith("ios") ||
-      platform.startsWith("mob") ||
-      platform.startsWith("and")
-    ) {
-      return "apple";
-    }
-
-    return "pc";
-  }, [accountInformation.account.game_platform]);
-
-  let couponText = "No";
-  if (accountInformation.account.coupon.active) {
-    couponText =
-      platform === "pc"
-        ? `${accountInformation.account.coupon.discount}%`
-        : `x${accountInformation.account.coupon.multiplier}`;
-  }
-
-  const copyUserId = useCallback(() => {
-    navigator.clipboard.writeText(accountInformation.user_id);
+  const copyAccountId = useCallback(() => {
+    navigator.clipboard.writeText(profile.accountId);
     setCopied(true);
     setTimeout(() => {
       setCopied(false);
     }, 2000);
-  }, [accountInformation.user_id]);
+  }, [profile.accountId]);
 
   return (
     <div className="flex w-full flex-col gap-4">
       <div className="flex items-center justify-between">
-        <div className="flex gap-2">
-          <Image
-            src={accountInformation.avatar}
-            alt="Avatar"
-            width={64}
-            height={64}
-            className="hidden sm:block"
-          />
-          <Image
-            src={accountInformation.avatar}
-            alt="Avatar"
-            width={32}
-            height={32}
-            className="block size-8 sm:hidden"
-          />
-          <div className="flex flex-col items-start">
-            <h1 className="text-primary flex items-start gap-2 text-xl font-bold">
-              {accountInformation.display_name}
-              <span className="text-foreground text-sm">
-                [{accountInformation.account.masteryRank}]
-              </span>
-            </h1>
-            <span className="text-accent hidden text-sm sm:block">
-              {accountInformation.user_id}
+        <div className="flex flex-col items-start">
+          <h1 className="text-primary flex items-start gap-2 text-xl font-bold">
+            {displayName}
+            <span className="text-foreground text-sm">
+              [{profile.masteryRank}]
             </span>
-          </div>
+          </h1>
+          <span className="text-accent hidden text-sm sm:block">
+            {profile.accountId}
+          </span>
         </div>
         <div className="flex items-start self-start">
-          {platformIcons[platform as keyof typeof platformIcons]}
+          {platform && platformIcons[platform]}
         </div>
       </div>
       <span className="text-accent block text-sm sm:hidden">
-        {accountInformation.user_id}
+        {profile.accountId}
       </span>
       <div className="grid grid-cols-2 gap-2">
         <div className="flex flex-col">
-          <span className="font-bold">Platinum</span>
-          <span>{accountInformation.account.platinum}</span>
+          <span className="font-bold">Mastery Rank</span>
+          <span>{profile.masteryRank}</span>
         </div>
         <div className="flex flex-col">
-          <span className="font-bold">Coupon</span>
-          <span>{couponText}</span>
-        </div>
-        <div className="flex flex-col">
-          <span className="font-bold">Country</span>
-          <span>{accountInformation.country_code}</span>
-        </div>
-        <div className="flex flex-col">
-          <span className="font-bold">Language</span>
-          <span>{accountInformation.site_language.toUpperCase()}</span>
-        </div>
-        <div className="flex flex-col">
-          <span className="font-bold">Purchases</span>
-          <span>{accountInformation.transactions?.length ?? 0}</span>
-        </div>
-        <div className="flex flex-col">
-          <span className="font-bold">Cross-Save</span>
-          <span>{accountInformation.account.crossSave ? "Yes" : "No"}</span>
-        </div>
-        <div className="flex flex-col">
-          <span className="flex items-center gap-2 font-bold">
-            <LinkIcon className="size-4" /> Twitch
+          <span className="font-bold">Created</span>
+          <span>
+            {profile.createdAt
+              ? new Date(profile.createdAt).toLocaleDateString()
+              : "Unknown"}
           </span>
-          <span>{accountInformation.account.twitchLinked ? "Yes" : "No"}</span>
         </div>
-        <div className="flex flex-col">
-          <span className="flex items-center gap-2 font-bold">
-            <LinkIcon className="size-4" /> Amazon
-          </span>
-          <span>{accountInformation.account.amazonLinked ? "Yes" : "No"}</span>
-        </div>
+        {platformNames.length > 0 && (
+          <div className="col-span-2 flex flex-col">
+            <span className="font-bold">Linked Platforms</span>
+            {platformNames.map(({ name, platform }) => (
+              <span key={name} className="flex items-center gap-2">
+                {platform && (
+                  <span className="[&_svg]:size-4">
+                    {platformIcons[platform]}
+                  </span>
+                )}
+                {name}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-          <Button variant="secondary" onClick={copyUserId}>
+          <Button variant="secondary" onClick={copyAccountId}>
             {copied ? (
               <span className="flex items-center gap-2">
                 <span className="hidden md:block">Copied</span>
@@ -172,12 +125,12 @@ export default function AccountDisplay({
             ) : (
               <>
                 <Clipboard className="size-4" />
-                Copy User ID
+                Copy Account ID
               </>
             )}
           </Button>
           <Link
-            href={`${cdnUrl[platform]}/getProfileViewingData.php?playerId=${accountInformation.user_id}`}
+            href={`https://api.warframe.com/cdn/getProfileViewingData.php?playerId=${profile.accountId}`}
             target="_blank"
             rel="noreferrer"
           >

@@ -1,6 +1,6 @@
 "use client";
 
-import { ExternalLink, RotateCcwIcon } from "lucide-react";
+import { ExternalLink, Loader2, RotateCcwIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,7 +10,10 @@ import AccountDisplay from "./account-display";
 export default function Account() {
   const {
     accountInformationString,
-    accountInformation,
+    accountId,
+    profile,
+    profileLoading,
+    profileError,
     setAccountInformationString,
     reset,
   } = useAccountStore();
@@ -45,26 +48,36 @@ export default function Account() {
           <RotateCcwIcon className="size-4" /> Reset
         </Button>
       </div>
-      {accountInformationString &&
-        (!accountInformation ? (
-          <span className="text-destructive text-wrap whitespace-pre-wrap">
-            You are not logged in. Please log in to your Warframe account on{" "}
-            <Link
-              href="https://www.warframe.com/login"
-              target="_blank"
-              className="text-primary underline"
-              rel="noreferrer"
-            >
-              warframe.com
-            </Link>{" "}
-            and try again.
-          </span>
-        ) : (
-          <div className="flex flex-col gap-4">
-            <div className="bg-border my-2 h-0.5 w-full" />
-            <AccountDisplay accountInformation={accountInformation} />
-          </div>
-        ))}
+      {accountInformationString && !accountId && (
+        <span className="text-destructive text-wrap whitespace-pre-wrap">
+          You are not logged in. Please log in to your Warframe account on{" "}
+          <Link
+            href="https://www.warframe.com/login"
+            target="_blank"
+            className="text-primary underline"
+            rel="noreferrer"
+          >
+            warframe.com
+          </Link>{" "}
+          and try again.
+        </span>
+      )}
+      {profileLoading && (
+        <span className="text-muted-foreground flex items-center gap-2">
+          <Loader2 className="size-4 animate-spin" /> Loading profile...
+        </span>
+      )}
+      {profileError && (
+        <span className="text-destructive text-wrap whitespace-pre-wrap">
+          Could not load your profile. Please try again later.
+        </span>
+      )}
+      {profile && (
+        <div className="flex flex-col gap-4">
+          <div className="bg-border my-2 h-0.5 w-full" />
+          <AccountDisplay profile={profile} />
+        </div>
+      )}
     </div>
   );
 }
