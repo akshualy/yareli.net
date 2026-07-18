@@ -1,14 +1,9 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { fetchProfile } from "@/app/account/actions";
-import type { Profile } from "@/lib/types";
 
 interface AccountState {
   accountInformationString: string;
   accountId: string | null;
-  profile: Profile | null;
-  profileLoading: boolean;
-  profileError: boolean;
   setAccountInformationString: (accountInformation: string) => void;
   reset: () => void;
 }
@@ -16,9 +11,6 @@ interface AccountState {
 const initialState = {
   accountInformationString: "",
   accountId: null as string | null,
-  profile: null as Profile | null,
-  profileLoading: false,
-  profileError: false,
 };
 
 function parseAccountId(accountInformationString: string): string | null {
@@ -38,36 +30,14 @@ function parseAccountId(accountInformationString: string): string | null {
 
 export const useAccountStore = create<AccountState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       ...initialState,
 
       setAccountInformationString: (accountInformationString: string) => {
-        const accountId = parseAccountId(accountInformationString);
         set({
           accountInformationString,
-          accountId,
-          profile: null,
-          profileLoading: accountId !== null,
-          profileError: false,
+          accountId: parseAccountId(accountInformationString),
         });
-
-        if (!accountId) {
-          return;
-        }
-
-        fetchProfile(accountId)
-          .then((profile) => {
-            if (get().accountId !== accountId) {
-              return;
-            }
-            set({ profile, profileLoading: false, profileError: !profile });
-          })
-          .catch(() => {
-            if (get().accountId !== accountId) {
-              return;
-            }
-            set({ profileLoading: false, profileError: true });
-          });
       },
 
       reset: () => set(initialState),

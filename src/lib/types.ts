@@ -16,11 +16,3 @@ export type SortedRelays = {
   first_empty_instance: RelayInstance | null;
   instances: RelayInstance[];
 };
-
-export type Profile = {
-  accountId: string;
-  displayName: string;
-  platformNames: string[];
-  masteryRank: number;
-  createdAt: number | null;
-};

@@ -1,6 +1,6 @@
 "use client";
 
-import { ExternalLink, Loader2, RotateCcwIcon } from "lucide-react";
+import { ExternalLink, RotateCcwIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,9 +11,6 @@ export default function Account() {
   const {
     accountInformationString,
     accountId,
-    profile,
-    profileLoading,
-    profileError,
     setAccountInformationString,
     reset,
   } = useAccountStore();
@@ -62,20 +59,10 @@ export default function Account() {
           and try again.
         </span>
       )}
-      {profileLoading && (
-        <span className="text-muted-foreground flex items-center gap-2">
-          <Loader2 className="size-4 animate-spin" /> Loading profile...
-        </span>
-      )}
-      {profileError && (
-        <span className="text-destructive text-wrap whitespace-pre-wrap">
-          Could not load your profile. Please try again later.
-        </span>
-      )}
-      {profile && (
+      {accountId && (
         <div className="flex flex-col gap-4">
           <div className="bg-border my-2 h-0.5 w-full" />
-          <AccountDisplay profile={profile} />
+          <AccountDisplay accountId={accountId} />
         </div>
       )}
     </div>
