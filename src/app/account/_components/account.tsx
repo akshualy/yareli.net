@@ -22,7 +22,7 @@ export default function Account() {
         copy all of the text from the page.
       </span>
       <Link
-        href="https://www.warframe.com/en/api/user-data"
+        href="https://www.warframe.com/api/user-data"
         target="_blank"
         rel="noreferrer"
       >
