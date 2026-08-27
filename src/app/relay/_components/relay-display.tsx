@@ -2,6 +2,7 @@
 
 import { Rocket, Users } from "lucide-react";
 import Image from "next/image";
+import { useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,6 +15,10 @@ import type { RelayInfo } from "@/lib/types";
 import { useBotCommandStore } from "@/stores/bot-command-store";
 import { useRelayFormStore } from "@/stores/relay-form-store";
 import CopyRelay from "./copy-relay";
+import StarChart from "./star-chart/star-chart";
+import { useWideDesktop } from "./star-chart/use-wide-desktop";
+
+const MAX_PREVIEW = 2;
 
 export default function RelayDisplay({
   setTab,
@@ -22,20 +27,34 @@ export default function RelayDisplay({
 }) {
   const { setRegion, setRelay, setInstance } = useBotCommandStore();
   const { relays, displayedInstances } = useRelayFormStore();
+  const wide = useWideDesktop();
+
+  const handleSelectInstance = useCallback(
+    (region: string, relay: RelayInfo["relay_name"], instance: number) => {
+      setRegion(region);
+      setRelay(relay);
+      setInstance(instance.toString());
+      setTab("commands");
+    },
+    [setRegion, setRelay, setInstance, setTab],
+  );
+
   if (relays.length === 0) {
     return null;
   }
 
-  const handleSelectInstance = (
-    region: string,
-    relay: RelayInfo["relay_name"],
-    instance: number,
-  ) => {
-    setRegion(region);
-    setRelay(relay);
-    setInstance(instance.toString());
-    setTab("commands");
-  };
+  if (wide) {
+    return (
+      <div className="flex w-full flex-col items-center justify-center gap-4">
+        <CopyRelay relays={relays} />
+        <StarChart
+          relays={relays}
+          previewCount={Math.min(MAX_PREVIEW, displayedInstances)}
+          onSelectInstanceAction={handleSelectInstance}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">
