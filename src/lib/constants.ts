@@ -31,7 +31,17 @@ export const RELAYS = {
   Pluto: "Orcus",
   Saturn: "Kronia",
   Mars: "Maroo's Bazaar",
+  Zariman: "Yuvan Peak",
 } as const;
+
+export const RELAY_COMMANDS: Record<string, string> = {
+  Strata: "strata",
+  Larunda: "larunda",
+  Orcus: "orcus",
+  Kronia: "kronia",
+  "Maroo's Bazaar": "maroo's",
+  "Yuvan Peak": "yuvan peak",
+};
 
 export const BLESSING_BUFFS = {
   affinity: { label: "Affinity", command: "aff" },
@@ -40,6 +50,7 @@ export const BLESSING_BUFFS = {
   damage: { label: "Damage", command: "dmg" },
   health: { label: "Health", command: "health" },
   shields: { label: "Shields", command: "shields" },
+  narin: { label: "Iceblade of Narin", command: "ice" },
 } as const;
 
 export const BLESSING_BUFF_KEYS = Object.keys(
@@ -47,3 +58,9 @@ export const BLESSING_BUFF_KEYS = Object.keys(
 ) as BlessingBuffKey[];
 
 export type BlessingBuffKey = keyof typeof BLESSING_BUFFS;
+
+export function availableBuffKeys(relay: string) {
+  return BLESSING_BUFF_KEYS.filter(
+    (key) => key !== "narin" || relay === RELAYS.Zariman,
+  );
+}

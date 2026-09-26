@@ -1,6 +1,10 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { BLESSING_BUFF_KEYS, type BlessingBuffKey } from "@/lib/constants";
+import {
+  availableBuffKeys,
+  BLESSING_BUFF_KEYS,
+  type BlessingBuffKey,
+} from "@/lib/constants";
 import type { RelayInfo } from "@/lib/types";
 
 type BlessingBuffState = Record<BlessingBuffKey, boolean>;
@@ -51,8 +55,8 @@ export const useBotCommandStore = create<BotCommandState>()(
         })),
 
       toggleAllBuffs: () => {
-        const { buffs } = get();
-        const allChecked = BLESSING_BUFF_KEYS.every((key) => buffs[key]);
+        const { buffs, relay } = get();
+        const allChecked = availableBuffKeys(relay).every((key) => buffs[key]);
         const newValue = !allChecked;
         set({
           buffs: Object.fromEntries(

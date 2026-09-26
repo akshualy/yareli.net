@@ -12,6 +12,7 @@ export const PLANETS: Record<string, PlanetPlacement> = {
   Mars: { x: 0.62, y: 0.33, radius: 11 },
   Saturn: { x: 0.35, y: 0.82, radius: 19 },
   Pluto: { x: 0.88, y: 0.503, radius: 11 },
+  Zariman: { x: 0.12, y: 0.35, radius: 19 },
 };
 
 export const SCENERY_BODIES = Object.entries({

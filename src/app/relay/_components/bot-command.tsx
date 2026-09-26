@@ -15,9 +15,10 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import {
-  BLESSING_BUFF_KEYS,
+  availableBuffKeys,
   BLESSING_BUFFS,
   REGIONS,
+  RELAY_COMMANDS,
   RELAYS,
 } from "@/lib/constants";
 import { useBotCommandStore } from "@/stores/bot-command-store";
@@ -39,23 +40,25 @@ export default function BotCommand() {
 
   const [copied, setCopied] = useState(false);
 
+  const buffKeys = useMemo(() => availableBuffKeys(relay), [relay]);
+
   const allBuffsChecked = useMemo(
-    () => BLESSING_BUFF_KEYS.every((key) => buffs[key]),
-    [buffs],
+    () => buffKeys.every((key) => buffs[key]),
+    [buffs, buffKeys],
   );
 
   const selectedBuffCommands = useMemo(() => {
     if (allBuffsChecked) return "all";
-    const selected = BLESSING_BUFF_KEYS.filter((key) => buffs[key]).map(
-      (key) => BLESSING_BUFFS[key].command,
-    );
+    const selected = buffKeys
+      .filter((key) => buffs[key])
+      .map((key) => BLESSING_BUFFS[key].command);
     return selected.length > 0 ? selected.join(" ") : "";
-  }, [buffs, allBuffsChecked]);
+  }, [buffs, buffKeys, allBuffsChecked]);
 
   const command = [
     "!bless",
     region === "OC" ? "oce" : region,
-    relay.split(" ")[0],
+    RELAY_COMMANDS[relay],
     instance,
     `${minutesUntilBless}m`,
     selectedBuffCommands,
@@ -149,7 +152,7 @@ export default function BotCommand() {
         </div>
       </div>
       <div className="grid grid-cols-2 flex-wrap items-center justify-start gap-x-4 gap-y-2 md:flex">
-        {BLESSING_BUFF_KEYS.map((key) => (
+        {buffKeys.map((key) => (
           <label
             key={key}
             className="flex cursor-pointer items-center gap-2 select-none"
