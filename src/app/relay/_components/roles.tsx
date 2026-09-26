@@ -26,6 +26,7 @@ export default function Roles() {
     damage,
     health,
     shields,
+    narin,
     messagePrefix,
     playerFormat,
     messageDivider,
@@ -36,6 +37,7 @@ export default function Roles() {
     setDamage,
     setHealth,
     setShields,
+    setNarin,
     setMessagePrefix,
     setPlayerFormat,
     setMessageDivider,
@@ -67,6 +69,7 @@ export default function Roles() {
       setDamage,
       setHealth,
       setShields,
+      setNarin,
     ];
 
     roleSetters.forEach((setter, index) => {
@@ -83,6 +86,7 @@ export default function Roles() {
     setDamage,
     setHealth,
     setShields,
+    setNarin,
   ]);
 
   const message = useMemo(() => {
@@ -95,6 +99,8 @@ export default function Roles() {
     if (damage) roles.push(formatMessage(playerFormat, damage, "Damage"));
     if (health) roles.push(formatMessage(playerFormat, health, "Health"));
     if (shields) roles.push(formatMessage(playerFormat, shields, "Shields"));
+    if (narin)
+      roles.push(formatMessage(playerFormat, narin, "Iceblade of Narin"));
 
     message += roles.join(messageDivider);
     message += messageSuffix;
@@ -106,6 +112,7 @@ export default function Roles() {
     damage,
     health,
     shields,
+    narin,
     playerFormat,
     messageDivider,
     messagePrefix,
@@ -139,7 +146,7 @@ export default function Roles() {
               <DialogDescription>
                 Paste a list of names prefixed with @ (one per line). They will
                 be assigned to roles in order: Affinity, Credits, Resource,
-                Damage, Health, Shields.
+                Damage, Health, Shields, Iceblade of Narin.
               </DialogDescription>
             </DialogHeader>
             <Textarea
@@ -207,6 +214,14 @@ export default function Roles() {
           <Input
             value={shields}
             onChange={(e) => setShields(e.target.value)}
+            maxLength={24}
+          />
+        </div>
+        <div className="grid grid-rows-2 gap-2">
+          <Label className="text-accent font-bold">Iceblade of Narin</Label>
+          <Input
+            value={narin}
+            onChange={(e) => setNarin(e.target.value)}
             maxLength={24}
           />
         </div>

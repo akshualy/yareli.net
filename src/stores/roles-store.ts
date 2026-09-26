@@ -8,6 +8,7 @@ interface RolesState {
   damage: string;
   health: string;
   shields: string;
+  narin: string;
   messagePrefix: string;
   playerFormat: string;
   messageDivider: string;
@@ -18,6 +19,7 @@ interface RolesState {
   setDamage: (damage: string) => void;
   setHealth: (health: string) => void;
   setShields: (shields: string) => void;
+  setNarin: (narin: string) => void;
   setMessagePrefix: (messagePrefix: string) => void;
   setPlayerFormat: (playerFormat: string) => void;
   setMessageDivider: (messageDivider: string) => void;
@@ -32,6 +34,7 @@ const initialState = {
   damage: "",
   health: "",
   shields: "",
+  narin: "",
   messagePrefix: "ROLES: ",
   playerFormat: "@{{name}} -> {{role}}",
   messageDivider: " | ",
@@ -54,6 +57,8 @@ export const useRolesStore = create<RolesState>()(
       setHealth: (health: string) => set({ health }),
 
       setShields: (shields: string) => set({ shields }),
+
+      setNarin: (narin: string) => set({ narin }),
 
       setMessagePrefix: (messagePrefix: string) => set({ messagePrefix }),
 
