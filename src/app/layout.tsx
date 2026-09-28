@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     template: "%s | yareli.net",
   },
   description:
-    "Community tools for Warframe players - find relays, manage blessings, and more.",
+    "Community tools for Warframe players. Merframe companion app, find relays, and manage blessings.",
   metadataBase: new URL("https://yareli.net"),
   openGraph: {
     type: "website",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     siteName: "yareli.net",
     title: "yareli.net",
     description:
-      "Community tools for Warframe players - find relays, manage blessings, and more.",
+      "Community tools for Warframe players. Merframe companion app, find relays, and manage blessings.",
     images: [
       {
         url: "https://yareli.net/og-image.png",
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "yareli.net",
     description:
-      "Community tools for Warframe players - find relays, manage blessings, and more.",
+      "Community tools for Warframe players. Merframe companion app, find relays, and manage blessings.",
     images: [
       {
         url: "https://yareli.net/og-image.png",

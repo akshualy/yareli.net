@@ -4,8 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import Aquablades from "./icons/aquablades";
 import GithubIcon from "./icons/github";
+import Riptide from "./icons/riptide";
 import SeaSnares from "./icons/sea-snares";
 import { NavLink } from "./nav-link";
 import { Button } from "./ui/button";
@@ -14,7 +14,6 @@ import { ModeToggle } from "./ui/theme-toggle";
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Prevent body scroll when menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -49,13 +48,13 @@ export default function Navbar() {
             />
           </Link>
           <div className="hidden items-center gap-4 md:flex">
+            <NavLink href="/merframe">
+              <Riptide className="size-6" />
+              <span className="text-xl">Merframe</span>
+            </NavLink>
             <NavLink href="/relay">
               <SeaSnares className="size-6" />
               <span className="text-xl">Relay</span>
-            </NavLink>
-            <NavLink href="/account">
-              <Aquablades className="size-6" />
-              <span className="text-xl">Account</span>
             </NavLink>
           </div>
         </div>
@@ -124,12 +123,12 @@ export default function Navbar() {
             <span>Relay</span>
           </NavLink>
           <NavLink
-            href="/account"
+            href="/merframe"
             onClick={() => setIsMobileMenuOpen(false)}
             className="gap-2 text-2xl"
           >
-            <Aquablades className="size-8" />
-            <span>Account</span>
+            <Riptide className="size-8" />
+            <span>Merframe</span>
           </NavLink>
           <div className="border-border flex items-center gap-4 border-t pt-4">
             <ModeToggle />
