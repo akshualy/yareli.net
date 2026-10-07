@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: "/relay",
+  },
   title: "Relay Robber",
   description:
     "Find the best Warframe relay instance for your blessing based on player count, region, and language.",

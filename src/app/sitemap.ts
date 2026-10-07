@@ -5,20 +5,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     {
-      url: baseUrl,
-      lastModified: new Date(),
+      url: `${baseUrl}/`,
+      lastModified: new Date("2026-02-13"),
       changeFrequency: "monthly",
       priority: 1,
     },
     {
       url: `${baseUrl}/merframe`,
-      lastModified: new Date(),
+      lastModified: new Date("2026-10-08"),
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/relay`,
-      lastModified: new Date(),
+      lastModified: new Date("2026-09-26"),
       changeFrequency: "weekly",
       priority: 0.8,
     },

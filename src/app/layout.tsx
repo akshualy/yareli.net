@@ -15,6 +15,9 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+  },
   title: {
     default: "yareli.net",
     template: "%s | yareli.net",

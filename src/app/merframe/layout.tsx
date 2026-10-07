@@ -4,6 +4,9 @@ const description =
   "A companion app for Warframe on Linux and Windows. Shows your inventory, foundry, relics, rivens, mastery and more. Integrates with warframe.market and in-game overlays.";
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: "/merframe",
+  },
   title: "Merframe",
   description,
   openGraph: {
