@@ -11,8 +11,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import type { RelayInfo } from "@/lib/types";
 import { useBotCommandStore } from "@/stores/bot-command-store";
+import { useLayoutStore } from "@/stores/layout-store";
 import { useRelayFormStore } from "@/stores/relay-form-store";
 import CopyRelay from "./copy-relay";
 import StarChart from "./star-chart/star-chart";
@@ -28,6 +30,7 @@ export default function RelayDisplay({
   const { setRegion, setRelay, setInstance } = useBotCommandStore();
   const { relays, displayedInstances } = useRelayFormStore();
   const wide = useWideDesktop();
+  const { legacyLayout, setLegacyLayout } = useLayoutStore();
 
   const handleSelectInstance = useCallback(
     (region: string, relay: RelayInfo["relay_name"], instance: number) => {
@@ -43,10 +46,21 @@ export default function RelayDisplay({
     return null;
   }
 
-  if (wide) {
+  const legacyToggle = wide ? (
+    <label className="flex w-full cursor-pointer items-center justify-end gap-2 select-none">
+      <Checkbox
+        checked={legacyLayout}
+        onCheckedChange={(checked) => setLegacyLayout(checked === true)}
+      />
+      <span className="text-sm">Use legacy layout</span>
+    </label>
+  ) : null;
+
+  if (wide && !legacyLayout) {
     return (
       <div className="flex w-full flex-col items-center justify-center gap-4">
         <CopyRelay relays={relays} />
+        {legacyToggle}
         <StarChart
           relays={relays}
           previewCount={Math.min(MAX_PREVIEW, displayedInstances)}
@@ -59,6 +73,7 @@ export default function RelayDisplay({
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       <CopyRelay relays={relays} />
+      {legacyToggle}
       <span>Click on any instance to jump to the bot command page.</span>
       <div className="flex w-full flex-wrap items-center justify-center gap-4">
         {relays.map((relay) => (
