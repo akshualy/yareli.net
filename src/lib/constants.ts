@@ -49,7 +49,7 @@ export const BLESSING_BUFFS = {
   resource: { label: "Resource", command: "res" },
   damage: { label: "Damage", command: "dmg" },
   health: { label: "Health", command: "health" },
-  shields: { label: "Shields", command: "shields" },
+  shields: { label: "Shields", command: "useless" },
   narin: { label: "Iceblade of Narin", command: "ice" },
 } as const;
 
