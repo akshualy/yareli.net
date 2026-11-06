@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "@/components/ui/sonner";
+import Footer from "../components/footer";
 import Navbar from "../components/navbar";
 import { ThemeProvider } from "../components/theme-provider";
 
@@ -81,6 +82,7 @@ export default function RootLayout({
             <div className="p-4 sm:p-8">{children}</div>
             <Toaster position="top-center" />
           </NuqsAdapter>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
